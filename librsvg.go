@@ -2,9 +2,7 @@ package librsvg
 
 /*
 #cgo pkg-config: librsvg-2.0
-#include <cairo/cairo-pdf.h>
 #include <librsvg/rsvg.h>
-#include <stdint.h>
 */
 import "C"
 import (
