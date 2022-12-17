@@ -1,9 +1,8 @@
 package cairo
 
 /*
-#cgo pkg-config: librsvg-2.0
+#cgo pkg-config: cairo
 #include <cairo/cairo-pdf.h>
-#include <librsvg/rsvg.h>
 #include <stdint.h>
 
 typedef unsigned char const* cairo_write_func_data_t;
@@ -35,7 +34,7 @@ func NewSurfaceForStream(writer io.Writer, widthInPoints, heightInPoints float64
 	wptr := uintptr(cgo.NewHandle(writer))
 	s := C.cairo_pdf_surface_create_for_stream(
 		C.cairo_write_func_t(C.go_cairo_write_func),
-		unsafe.Pointer(&wptr), C.gdouble(widthInPoints), C.gdouble(heightInPoints))
+		unsafe.Pointer(&wptr), C.double(widthInPoints), C.double(heightInPoints))
 	c := C.cairo_create(s)
 	return cairo.NewSurfaceFromC(cairo.Cairo_surface(unsafe.Pointer(s)), cairo.Cairo_context(unsafe.Pointer(c)))
 }
