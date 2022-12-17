@@ -5,24 +5,37 @@ package cairo
 #include <cairo/cairo-pdf.h>
 #include <librsvg/rsvg.h>
 #include <stdint.h>
+
+typedef unsigned char const* cairo_write_func_data_t;
+extern cairo_status_t go_cairo_write_func(void *closure, cairo_write_func_data_t data, unsigned int length);
 */
 import "C"
 
 import (
+	"io"
 	"runtime/cgo"
 	"unsafe"
 
 	cairo "github.com/ungerik/go-cairo"
 )
 
-type Write func(closure interface{}, data []byte, length uint) cairo.Status
+// cairo_write_func_t
+//
+//export go_cairo_write_func
+func go_cairo_write_func(closure *C.void, data C.cairo_write_func_data_t, length C.uint) C.cairo_status_t {
+	if writer, ok := cgo.Handle(*(*uintptr)(unsafe.Pointer(closure))).Value().(io.Writer); ok {
+		if _, err := writer.Write(C.GoBytes(unsafe.Pointer(data), C.int(length))); err == nil {
+			return C.CAIRO_STATUS_SUCCESS
+		}
+	}
+	return C.CAIRO_STATUS_WRITE_ERROR
+}
 
-func NewSurfaceForStream(writeFunc Write, closure interface{}, widthInPoints, heightInPoints float64) *cairo.Surface {
-	cl := cgo.NewHandle(closure)
-	wr := cgo.NewHandle(writeFunc)
+func NewSurfaceForStream(writer io.Writer, widthInPoints, heightInPoints float64) *cairo.Surface {
+	wptr := uintptr(cgo.NewHandle(writer))
 	s := C.cairo_pdf_surface_create_for_stream(
-		C.cairo_write_func_t(unsafe.Pointer(&wr)),
-		unsafe.Pointer(&cl), C.gdouble(widthInPoints), C.gdouble(heightInPoints))
+		C.cairo_write_func_t(C.go_cairo_write_func),
+		unsafe.Pointer(&wptr), C.gdouble(widthInPoints), C.gdouble(heightInPoints))
 	c := C.cairo_create(s)
 	return cairo.NewSurfaceFromC(cairo.Cairo_surface(unsafe.Pointer(s)), cairo.Cairo_context(unsafe.Pointer(c)))
 }

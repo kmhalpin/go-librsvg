@@ -21,7 +21,7 @@ type Handle struct {
 }
 
 type Rectangle struct {
-	x, y, width, height float64
+	X, Y, Width, Height float64
 }
 
 func (h Handle) GetIntrinsicSizeInPixels() (width, height float64) {
@@ -30,14 +30,15 @@ func (h Handle) GetIntrinsicSizeInPixels() (width, height float64) {
 	return float64(rsvg_w), float64(rsvg_h)
 }
 
-func (h Handle) RenderDocument(c cairo.Cairo_context, rectangle Rectangle) error {
-	var rsvg_err *C.GError
+func (h Handle) RenderDocument(surface *cairo.Surface, rectangle Rectangle) error {
+	_, c := surface.Native()
 
-	C.rsvg_handle_render_document(h.rsvgHandle, (*C.cairo_t)(unsafe.Pointer(c)), &C.RsvgRectangle{
-		x:      C.gdouble(rectangle.x),
-		y:      C.gdouble(rectangle.y),
-		width:  C.gdouble(rectangle.width),
-		height: C.gdouble(rectangle.height),
+	var rsvg_err *C.GError
+	C.rsvg_handle_render_document(h.rsvgHandle, *(**C.cairo_t)(unsafe.Pointer(&c)), &C.RsvgRectangle{
+		x:      C.gdouble(rectangle.X),
+		y:      C.gdouble(rectangle.Y),
+		width:  C.gdouble(rectangle.Width),
+		height: C.gdouble(rectangle.Height),
 	}, &rsvg_err)
 	if rsvg_err != nil {
 		return glib.NewGError(uint32(rsvg_err.domain), int(rsvg_err.code), C.GoString(rsvg_err.message))
