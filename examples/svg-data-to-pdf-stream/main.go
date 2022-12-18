@@ -13,20 +13,22 @@ func main() {
 		panic(err)
 	}
 
+	file, err := os.OpenFile("test.pdf", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
 	h, err := librsvg.NewHandleFromData(data)
 	if err != nil {
 		panic(err)
 	}
 	width, height := h.GetIntrinsicSizeInPixels()
 
-	file, err := os.OpenFile("test.pdf", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
-	if err != nil {
-		panic(err)
-	}
 	s := cairo.NewSurfaceForStream(file, width, height)
+	defer s.Destroy()
 
 	h.RenderDocument(s, librsvg.Rectangle{
 		X: 0, Y: 0, Width: width, Height: height,
 	})
-	s.Destroy()
 }
