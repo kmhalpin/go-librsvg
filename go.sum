@@ -1,2 +1,7 @@
-github.com/ungerik/go-cairo v0.0.0-20220815093914-e24bd4259cef h1:zpOobzu7pmkVFs/XNuhJvxHCdQrGWxybcfVDabi//B4=
-github.com/ungerik/go-cairo v0.0.0-20220815093914-e24bd4259cef/go.mod h1:yLTJg56omDJ+JVxZ5whpCrZgQdaSs+OBdFa+X6ViJcI=
+github.com/diamondburned/gotk4/pkg v0.0.0-20220529201008-66c7fe5d2b7c h1:d09K0Y9HQ6/WLlFlH11dPt9TdDLIOxlztHaLUOpKa04=
+github.com/diamondburned/gotk4/pkg v0.0.0-20220529201008-66c7fe5d2b7c/go.mod h1:rLH6FHos690jFgAM/GYEpMykuE/9NmN6zOvFlr8JTvE=
+go4.org/unsafe/assume-no-moving-gc v0.0.0-20211027215541-db492cf91b37/go.mod h1:FftLjUGFEDu5k8lt0ddY+HcrH/qU/0qk+H8j9/nTl3E=
+go4.org/unsafe/assume-no-moving-gc v0.0.0-20220617031537-928513b29760 h1:FyBZqvoA/jbNzuAWLQE2kG820zMAkcilx6BMjGbL/E4=
+go4.org/unsafe/assume-no-moving-gc v0.0.0-20220617031537-928513b29760/go.mod h1:FftLjUGFEDu5k8lt0ddY+HcrH/qU/0qk+H8j9/nTl3E=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c h1:5KslGYwFpkhGh+Q16bwMP3cOontH8FOep7tGV86Y7SQ=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
