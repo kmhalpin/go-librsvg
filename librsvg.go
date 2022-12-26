@@ -12,6 +12,7 @@ import (
 	"github.com/diamondburned/gotk4/pkg/cairo"
 	"github.com/diamondburned/gotk4/pkg/core/gerror"
 	"github.com/diamondburned/gotk4/pkg/core/gioutil"
+	"github.com/diamondburned/gotk4/pkg/core/glib"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
 )
 
@@ -123,7 +124,7 @@ const (
 	// Source: https://gnome.pages.gitlab.gnome.org/librsvg/Rsvg-2.0/flags.HandleFlags.html
 )
 
-func NewHandleFromStreamSync(inputStream io.Reader, file *gio.File, handleFlags HandleFlags, cancellable *gio.Cancellable) (*Handle, error) {
+func NewHandleFromStreamSync(inputStream io.Reader, file gio.Filer, handleFlags HandleFlags, cancellable *gio.Cancellable) (*Handle, error) {
 	var rsvg_err *C.GError
 
 	in := gioutil.NewInputStream(inputStream)
@@ -131,7 +132,7 @@ func NewHandleFromStreamSync(inputStream io.Reader, file *gio.File, handleFlags 
 
 	var f *C.GFile = nil
 	if file != nil {
-		fptr := file.Native()
+		fptr := glib.BaseObject(file).Native()
 		f = *(**C.GFile)(unsafe.Pointer(&fptr))
 	}
 
